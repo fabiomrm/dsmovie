@@ -8,16 +8,27 @@ import { MoviePage } from '../../types/movieTypes';
 export const Listing = () => {
 
     const [pageNumber, setPageNumber] = useState(0);
+    const [page, setPage] = useState<MoviePage>({
+        content:[],
+        last: true,
+        totalPages: 0,
+        totalElements: 0,
+        size: 12,
+        number: 0,
+        first: true,
+        numberOfElements: 0,
+        empty: true,
+    });
+
     
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=128&page=0`)
+        axios.get(`${BASE_URL}/movies?size=128&page=${pageNumber}`)
         .then(res => {
             const data = res.data as MoviePage;
-            console.log(data)
-            setPageNumber(data.number);
+            setPage(data);
         })
 
-    }, [])
+    }, [pageNumber])
     
     
    
@@ -27,21 +38,13 @@ export const Listing = () => {
             <Pagination />
             <div className="container">
                 <div className="row">
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
+                    {
+                        page.content.map((movie, index) => (
+                            <div className="col-sm-6 col-lg-4 col-xl-3 mb-3" key={index}>
+                                <MovieCard movie={movie} />
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </>
