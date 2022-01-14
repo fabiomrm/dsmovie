@@ -22,20 +22,24 @@ export const Listing = () => {
 
     
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=128&page=${pageNumber}`)
+        axios.get(`${BASE_URL}/movies?size=12&page=${pageNumber}`)
         .then(res => {
             const data = res.data as MoviePage;
             setPage(data);
         })
-
     }, [pageNumber])
+
+    const handlePageChange = (newPageNumber: number) => {
+        console.log(page.last)
+        setPageNumber(newPageNumber);
+    };
     
     
    
     
     return(
         <>
-            <Pagination />
+            <Pagination page={page} clickFn={handlePageChange}/>
             <div className="container">
                 <div className="row">
                     {
